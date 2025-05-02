@@ -96,7 +96,7 @@ PROBATIO/
 1. Clone the Repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/probatio.git
+git clone https://github.com/GurmukhSKharod/probatio.git
 cd probatio
 ```
 
