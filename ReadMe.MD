@@ -1,6 +1,6 @@
 # Probatio – AI-Powered Python Test Runner
 
-**Probatio** is a full-stack automated testing app that lets users upload Python scripts and apply intelligent testing strategies — like unit tests, property-based tests, and smart random input fuzzing. This is a portfolio-ready QA project built with React + FastAPI + Pytest + Hypothesis + AST.
+**Probatio** is a full-stack automated testing app that lets users upload Python scripts and apply intelligent testing strategies — like unit tests, property-based tests, and smart random input fuzzing. This project is built with React + FastAPI + Pytest + Hypothesis + AST.
 
 ---
 
