@@ -2,6 +2,8 @@
 
 **Probatio** is a full-stack automated testing app that lets users upload Python scripts and apply intelligent testing strategies — like unit tests, property-based tests, and smart random input fuzzing. This project is built with React + FastAPI + Pytest + Hypothesis + AST.
 
+Check it out here: https://probatio.netlify.app/
+
 ---
 
 ## Features
