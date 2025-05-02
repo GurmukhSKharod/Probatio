@@ -1,6 +1,6 @@
 // src/App.tsx
 
-import React, { useState } from "react";
+import { useState } from "react";
 import FileUpload from "./components/FileUpload";
 import StrategySelector from "./components/StrategySelector";
 import Results from "./components/Results";
