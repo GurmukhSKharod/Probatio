@@ -1,6 +1,7 @@
 // src/components/Results.tsx
 
 import React from "react";
+import Chart from "./Chart";
 
 interface Props {
   strategy: string;
@@ -9,6 +10,10 @@ interface Props {
 }
 
 const Results: React.FC<Props> = ({ strategy, success, output }) => {
+  // Dynamically count PASS and FAIL from output string
+  const passCount = (output.match(/PASS/g) || []).length;
+  const failCount = (output.match(/FAIL/g) || []).length;
+
   return (
     <div
       className="mt-8 p-6 border rounded shadow-sm 
@@ -37,6 +42,12 @@ const Results: React.FC<Props> = ({ strategy, success, output }) => {
         </span>
       </p>
 
+      {/* Chart */}
+      <div className="mt-6 max-w-xs">
+        <Chart passCount={passCount} failCount={failCount} />
+      </div>
+
+      {/* Output box */}
       <pre
         className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 
         text-sm text-gray-800 dark:text-gray-100 

@@ -21,6 +21,7 @@ const StrategySelector: React.FC<Props> = ({ strategy, setStrategy }) => {
       <option value="unit">Unit Testing</option>
       <option value="property">Property-Based Testing</option>
       <option value="random">Random Testing</option> 
+      <option value="combinatorial">Combinatorial Testing</option>
     </select>
   );
 };
