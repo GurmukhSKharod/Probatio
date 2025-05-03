@@ -9,7 +9,57 @@ interface Props {
   output: string;
 }
 
+const extractCounts = (strategy: string, output: string): { pass: number; fail: number } => {
+  let pass = 0;
+  let fail = 0;
+  const lowerStrategy = strategy.toLowerCase();
+
+  if (lowerStrategy === "combinatorial") {
+    const passMatches = output.match(/=>\s*PASS/g);
+    const failMatches = output.match(/=>\s*FAIL/g);
+    pass = passMatches ? passMatches.length : 0;
+    fail = failMatches ? failMatches.length : 0;
+  } else if (lowerStrategy === "random") {
+    // Match lines like: "add: 1 PASS, 3 FAIL" or "subtract: 2 PASS, 2 FAIL"
+    const matches = [...output.matchAll(/:?\s*(\d+)\s+PASS,\s*(\d+)\s+FAIL/gi)];
+    for (const match of matches) {
+      pass += parseInt(match[1], 10);
+      fail += parseInt(match[2], 10);
+    }
+  } else if (lowerStrategy === "unit" || lowerStrategy === "property") {
+    const matches = output.match(/(\d+)\s+passed.*?(\d+)?\s+failed?/i);
+    if (matches) {
+      pass = parseInt(matches[1], 10);
+      fail = matches[2] ? parseInt(matches[2], 10) : 0;
+    } else {
+      // Check if percentage is shown like: "PASSED [50%]"
+      const percentMatch = output.match(/\[(\d+)%\]/);
+      if (percentMatch) {
+        const percent = parseInt(percentMatch[1], 10);
+        if (percent === 100) {
+          pass = 1;
+          fail = 0;
+        } else if (percent === 0) {
+          pass = 0;
+          fail = 1;
+        } else {
+          pass = 1;
+          fail = 1;
+        }
+      } else {
+        // Final fallback if nothing matches
+        pass = success ? 1 : 0;
+        fail = success ? 0 : 1;
+      }
+    }
+  }
+
+  return { pass, fail };
+};
+
 const Results: React.FC<Props> = ({ strategy, success, output }) => {
+  const { pass, fail } = extractCounts(strategy, output);
+
   return (
     <div
       className="mt-8 p-6 border rounded-xl shadow-lg 
@@ -44,8 +94,10 @@ const Results: React.FC<Props> = ({ strategy, success, output }) => {
         </div>
       </div>
 
-      <div className="mb-6">
-        <Chart passCount={success ? 1 : 0} failCount={success ? 0 : 1} />
+      <div className="flex justify-center mb-6">
+        <div className="w-full sm:w-1/2">
+          <Chart passCount={pass} failCount={fail} />
+        </div>
       </div>
 
       <pre
