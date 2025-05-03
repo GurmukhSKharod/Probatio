@@ -30,7 +30,7 @@ const Chart: React.FC<Props> = ({ passCount, failCount }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow">
       <Pie data={data} />
     </div>
   );

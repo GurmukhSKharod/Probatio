@@ -10,48 +10,49 @@ interface Props {
 }
 
 const Results: React.FC<Props> = ({ strategy, success, output }) => {
-  // Dynamically count PASS and FAIL from output string
-  const passCount = (output.match(/PASS/g) || []).length;
-  const failCount = (output.match(/FAIL/g) || []).length;
-
   return (
     <div
-      className="mt-8 p-6 border rounded shadow-sm 
+      className="mt-8 p-6 border rounded-xl shadow-lg 
       bg-white dark:bg-gray-900 
       text-gray-800 dark:text-gray-100 
       border-gray-300 dark:border-gray-700 
-      animate-slideUp transition-all duration-500"
+      animate-fadeIn transition-all duration-700 ease-in-out"
     >
-      <h2 className="font-bold text-xl mb-3 text-gray-800 dark:text-gray-100">Results</h2>
+      <h2 className="font-bold text-2xl mb-6 text-gray-800 dark:text-gray-100 tracking-wide">
+        Results
+      </h2>
 
-      <p className="text-gray-700 dark:text-gray-300">
-        <strong>Strategy:</strong>{" "}
-        <span className="text-blue-600 dark:text-blue-400">{strategy}</span>
-      </p>
-
-      <p className="text-gray-700 dark:text-gray-300">
-        <strong>Status:</strong>{" "}
-        <span
-          className={`font-medium ${
-            success
-              ? "text-green-600 dark:text-green-400"
-              : "text-red-600 dark:text-red-400"
-          }`}
-        >
-          {success ? "Passed" : "Failed"}
-        </span>
-      </p>
-
-      {/* Chart */}
-      <div className="mt-6 max-w-xs">
-        <Chart passCount={passCount} failCount={failCount} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+        <div className="text-lg">
+          <span className="font-medium text-gray-600 dark:text-gray-300">Strategy:</span>{" "}
+          <span className="text-indigo-600 dark:text-indigo-400 font-semibold capitalize">
+            {strategy}
+          </span>
+        </div>
+        <div className="text-lg">
+          <span className="font-medium text-gray-600 dark:text-gray-300">Status:</span>{" "}
+          <span
+            className={`font-semibold px-2 py-1 rounded transition-colors duration-300
+              ${
+                success
+                  ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
+                  : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300"
+              }`}
+          >
+            {success ? "Passed" : "Failed"}
+          </span>
+        </div>
       </div>
 
-      {/* Output box */}
+      <div className="mb-6">
+        <Chart passCount={success ? 1 : 0} failCount={success ? 0 : 1} />
+      </div>
+
       <pre
         className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 
         text-sm text-gray-800 dark:text-gray-100 
-        overflow-auto whitespace-pre-wrap max-h-96 rounded border border-gray-300 dark:border-gray-600"
+        overflow-auto whitespace-pre-wrap max-h-96 rounded-lg border border-gray-300 dark:border-gray-600
+        animate-fadeIn transition-all duration-700 ease-in-out"
       >
         {output}
       </pre>
