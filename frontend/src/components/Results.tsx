@@ -9,7 +9,11 @@ interface Props {
   output: string;
 }
 
-const extractCounts = (strategy: string, output: string): { pass: number; fail: number } => {
+const extractCounts = (
+  strategy: string,
+  output: string,
+  success: boolean
+): { pass: number; fail: number } => {
   let pass = 0;
   let fail = 0;
   const lowerStrategy = strategy.toLowerCase();
@@ -20,7 +24,6 @@ const extractCounts = (strategy: string, output: string): { pass: number; fail: 
     pass = passMatches ? passMatches.length : 0;
     fail = failMatches ? failMatches.length : 0;
   } else if (lowerStrategy === "random") {
-    // Match lines like: "add: 1 PASS, 3 FAIL" or "subtract: 2 PASS, 2 FAIL"
     const matches = [...output.matchAll(/:?\s*(\d+)\s+PASS,\s*(\d+)\s+FAIL/gi)];
     for (const match of matches) {
       pass += parseInt(match[1], 10);
@@ -32,7 +35,6 @@ const extractCounts = (strategy: string, output: string): { pass: number; fail: 
       pass = parseInt(matches[1], 10);
       fail = matches[2] ? parseInt(matches[2], 10) : 0;
     } else {
-      // Check if percentage is shown like: "PASSED [50%]"
       const percentMatch = output.match(/\[(\d+)%\]/);
       if (percentMatch) {
         const percent = parseInt(percentMatch[1], 10);
@@ -47,7 +49,6 @@ const extractCounts = (strategy: string, output: string): { pass: number; fail: 
           fail = 1;
         }
       } else {
-        // Final fallback if nothing matches
         pass = success ? 1 : 0;
         fail = success ? 0 : 1;
       }
@@ -57,8 +58,18 @@ const extractCounts = (strategy: string, output: string): { pass: number; fail: 
   return { pass, fail };
 };
 
+
 const Results: React.FC<Props> = ({ strategy, success, output }) => {
-  const { pass, fail } = extractCounts(strategy, output);
+  
+  if (!output || typeof output !== "string") {
+    return (
+      <div className="text-red-600 dark:text-red-400 mt-6">
+        Error: No valid output received from the backend.
+      </div>
+    );
+  }
+
+  const { pass, fail } = extractCounts(strategy, output, success);
 
   return (
     <div
